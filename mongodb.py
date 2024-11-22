@@ -24,6 +24,7 @@ def guardar_provincias(db, provincias):
 def guardar_localidades(db, localidades, provincia_nombre):
     coleccion = db['localidades']
     try:
+        coleccion.delete_many({"provincia": provincia_nombre})
         for localidad in localidades:
             localidad['provincia'] = provincia_nombre
         coleccion.insert_many(localidades)

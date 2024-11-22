@@ -18,6 +18,7 @@ def obtener_provincias():
 # Obtener localidades por provincia desde la API
 def obtener_localidades(provincia_nombre):
     # Solicitud GET a la API
+    # Modificar MAX segun sea necesario, si se optienen las 2000 provincias, el programa tarda muchisimo en optener el clima
     url = f"https://apis.datos.gob.ar/georef/api/municipios?provincia={provincia_nombre}&max=500"
     try:
         response = requests.get(url)
