@@ -40,6 +40,7 @@ def obtener_clima_localidades(db):
 
         APIkey = "9e0f15069eb1de07860de8224e530bd0"
         clima_localidades = []
+        errores = []
 
         for localidad in localidades:
             if "centroide" not in localidad:
@@ -51,7 +52,7 @@ def obtener_clima_localidades(db):
             nombre_localidad = localidad["nombre"]
 
             # Construir la URL de la API de OpenWeather
-            url = f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={APIkey}&units=metric&lang=es"
+            url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={APIkey}"
 
             try:
                 # Realizar la solicitud a la API
@@ -64,19 +65,25 @@ def obtener_clima_localidades(db):
                     "localidad": nombre_localidad,
                     "lat": lat,
                     "lon": lon,
-                    "temperatura_actual": data["current"]["temp"],
-                    "descripcion": data["current"]["weather"][0]["description"],
-                    "humedad": data["current"]["humidity"],
-                    "viento": data["current"]["wind_speed"],
-                    "timestamp": data["current"]["dt"]
+                    "temperatura_actual": data["main"]["temp"],
+                   # "descripcion": data["weather"][0]["description"],
+                    #"humedad": data["humidity"],
+                   # "viento": data["wind_speed"],
+                   # "timestamp": data["dt"]
                 }
                 clima_localidades.append(clima)
-                generar_registro(f"Clima obtenido para la localidad {nombre_localidad}.")
             except Exception as e:
-                generar_registro(f"Error al obtener clima para {nombre_localidad}: {e}")
-                continue
-
-        return clima_localidades
+                errores.append(f"Error al obtener clima para {nombre_localidad}: {e}")
+                return[]
+            
+        # Generar registro final
+        if errores:
+            generar_registro("Se produjo un error crítico al obtener climas: " + "; ".join(errores))
+            return[]
+        else:
+            generar_registro("Clima obtenido exitosamente para todas las localidades.")
+            return clima_localidades
+             
     except Exception as e:
         generar_registro(f"Error al procesar las localidades: {e}")
         return []
