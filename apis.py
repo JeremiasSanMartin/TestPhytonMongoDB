@@ -19,7 +19,7 @@ def obtener_provincias():
 def obtener_localidades(provincia_nombre):
     # Solicitud GET a la API
     # Modificar MAX segun sea necesario, si se optienen las 2000 provincias, el programa tarda muchisimo en optener el clima
-    url = f"https://apis.datos.gob.ar/georef/api/municipios?provincia={provincia_nombre}&max=500"
+    url = f"https://apis.datos.gob.ar/georef/api/municipios?provincia={provincia_nombre}&max=1"
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -67,10 +67,10 @@ def obtener_clima_localidades(db):
                     "lat": lat,
                     "lon": lon,
                     "temperatura_actual": data["main"]["temp"],
-                   # "descripcion": data["weather"][0]["description"],
+                    # "descripcion": data["weather"][0]["description"],
                     #"humedad": data["humidity"],
-                   # "viento": data["wind_speed"],
-                   # "timestamp": data["dt"]
+                    # "viento": data["wind_speed"],
+                    # "timestamp": data["dt"]
                 }
                 clima_localidades.append(clima)
             except Exception as e:

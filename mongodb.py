@@ -71,3 +71,27 @@ def guardar_clima_en_bd(db, clima_localidades):
                 generar_registro(f"Error al guardar clima para {clima['localidad']}: {e}")
     except Exception as e:
         generar_registro(f"Error al guardar datos del clima en la base de datos: {e}")
+
+def consultar_clima_por_localidad(db, nombre_localidad):
+    try:
+        coleccion_clima = db["clima"]
+
+        # Buscar el clima por el campo "localidad"
+        clima = coleccion_clima.find_one({"localidad": nombre_localidad})
+
+        if clima:
+            generar_registro(f"El usuario busco el clima de {nombre_localidad}.")
+            return {
+                "localidad": clima.get("localidad"),
+                "temperatura_actual": clima.get("temperatura_actual"),
+                "lat": clima.get("lat"),
+                "lon": clima.get("lon"),
+            }
+            
+        else:
+            generar_registro(f"No se encontraron datos de clima para la localidad {nombre_localidad}.")
+            return None
+
+    except Exception as e:
+        generar_registro(f"Error al consultar el clima para la localidad {nombre_localidad}: {e}")
+        return None
